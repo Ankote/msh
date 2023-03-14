@@ -1,16 +1,18 @@
 NAME = minishell
 
 CC = cc
-DIR = builtins
-CFLAGS = -Wall -Wextra -Werror
+
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 
 FILES = minishell.c  parcing/handle_quotes.c parcing/utils/utils0.c\
 		parcing/utils/utils1.c parcing/lexer.c parcing/expanding.c\
-		parcing/utils/lexer_utils.c $(DIR)/echo.c $(DIR)/exit.c\
+		parcing/utils/lexer_utils.c\
+		
+		
 
 OBJCS = $(FILES:.c=.o)
 
-INCLUDES = libft/libft.a -fsanitize=address
+INCLUDES = libft/libft.a
 
 all : $(NAME)
 	clear
@@ -37,6 +39,8 @@ re :fclean all
 
 run : re clean
 	@./minishell
+	
+
 push :
 	git add .
 	git commit -m "Updated"

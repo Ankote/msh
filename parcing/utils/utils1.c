@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 19:50:15 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/13 16:55:00 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/11 20:11:46 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ char *ft_charjoin(char *s, char c)
 	}	
 	p[i++] = c;
 	p[i] = 0;
-	free(s);
 	return (p);
 }
 
@@ -100,23 +99,4 @@ void free_double(char **p)
     while(p && p[i])
         free(p[i++]);
     free(p);
-}
-
-char *ft_trim(char *arg)
-{
-	int i;
-	char *p;
-	
-	i = -1;
-	p = ft_strdup("");
-	while(arg[++i])
-	{
-		 if((arg[i] != '\'' && arg[i] != '\"'))
-            p = ft_charjoin(p,arg[i]);
-		if(arg[i] == '\'' && quotes(arg, i) == 1)
-			p = ft_charjoin(p,arg[i]);
-		if(arg[i] == '\"' && quotes(arg, i) == 2)
-			p = ft_charjoin(p,arg[i]);
-	}
-	return(p); 
 }

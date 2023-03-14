@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/13 21:07:52 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/11 20:48:06 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_list
 	int 			infile;
 	int 			outfile;
 	int 			append_in;
-	int 			perror;
 	struct s_list	*next;
 }	t_list;
 
@@ -82,7 +81,6 @@ int	ft_strcmp(const char *s1, const char *s2);
 
 char *ft_charjoin(char *s, char c);
 char 	*ft_charjoin(char *s, char c);
-char *ft_trim(char *arg);
 
 /*******lexer*******/
 
@@ -95,11 +93,6 @@ int		quotes(char *line, int index);
 char *ft_get_arg(char **env, char *str, int *i, int sta);
 char *ft_expand(char **env, char *str, int sta);
 
-/*************************/
-/******* Builtins ********/
-void	echo(char **env, t_list *list);
-void	expaned_arg(char **env, char *arg, int s);
-int	ft_exit(t_list *data);
 /*************************/
 void ft_add_str(char *ln, t_token **token,char *p, int *i);
 void ft_add_opr(char *ln, t_token **token,char *p, int *i);
