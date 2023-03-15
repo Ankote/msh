@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 19:50:15 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/11 20:11:46 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/14 16:42:50 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ char **ft_realloc(char **p, char *str)
      while(p && p[i])
      {
          rp[i] = ft_calloc(1, 1);
-         rp[i] = ft_strjoin(rp[i], p[i]);
+         rp[i] = ft_join_free(rp[i], p[i]);
          i++;
      }
     
      rp[i] = ft_calloc(1, 1); 
-     rp[i] = ft_strjoin(rp[i], str);
+     rp[i] = ft_join_free(rp[i], str);
      
      i ++;
      rp[i] = NULL;
@@ -74,6 +74,7 @@ char *ft_charjoin(char *s, char c)
 	}	
 	p[i++] = c;
 	p[i] = 0;
+	free(s);
 	return (p);
 }
 
@@ -99,4 +100,23 @@ void free_double(char **p)
     while(p && p[i])
         free(p[i++]);
     free(p);
+}
+
+char *ft_trim(char *arg)
+{
+	int i;
+	char *p;
+	
+	i = -1;
+	p = ft_strdup("");
+	while(arg[++i])
+	{
+		 if((arg[i] != '\'' && arg[i] != '\"'))
+            p = ft_charjoin(p,arg[i]);
+		if(arg[i] == '\'' && quotes(arg, i) == 1)
+			p = ft_charjoin(p,arg[i]);
+		if(arg[i] == '\"' && quotes(arg, i) == 2)
+			p = ft_charjoin(p,arg[i]);
+	}
+	return(p); 
 }

@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 12:17:19 by aankote           #+#    #+#             */
-/*   Updated: 2022/10/25 01:50:02 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/13 16:53:52 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
+	
 	int		i;
 	int		j;
 	size_t	total_size;

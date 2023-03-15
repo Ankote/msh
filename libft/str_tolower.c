@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   str_tolower.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 21:07:01 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/12 21:03:14 by aankote          ###   ########.fr       */
+/*   Created: 2023/03/13 00:00:57 by rakhsas           #+#    #+#             */
+/*   Updated: 2023/03/13 00:01:19 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-int	ft_tolower(int c)
+
+void str_tolower(char *str)
 {
-	if (c >= 'A' && c <= 'Z')
+	int	i;
+
+	i = 0;
+	while (i[str])
 	{
-		c += 32;
+		i[str] = ft_tolower(i[str]);
+		i++;
 	}
-	return (c);
 }

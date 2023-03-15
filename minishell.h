@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/11 20:48:06 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/15 09:16:04 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@
 # define PIPE 9
 # define HERDOC 10
 # define LIMITER 11
-
 /********exit status*******/
 
 # define ERROR 1
@@ -49,6 +48,11 @@ typedef struct	s_token
 	struct s_token	*next;
 }   t_token;
 
+typedef struct	s_dependences
+{
+	int				exit_status;
+}   t_dependences;
+
 typedef struct s_list
 {
 	char			*cmd;
@@ -56,6 +60,7 @@ typedef struct s_list
 	int 			infile;
 	int 			outfile;
 	int 			append_in;
+	int 			perror;
 	struct s_list	*next;
 }	t_list;
 
@@ -79,9 +84,9 @@ int	ft_strcmp(const char *s1, const char *s2);
 
 /*******UTILS********/
 
-char *ft_charjoin(char *s, char c);
-char 	*ft_charjoin(char *s, char c);
-
+char	*ft_charjoin(char *s, char c);
+char *ft_trim(char *arg);
+char *ft_join_free(char *s1, char *s2);
 /*******lexer*******/
 
 void 	get_infile(t_list *list, char *val);
@@ -94,8 +99,19 @@ char *ft_get_arg(char **env, char *str, int *i, int sta);
 char *ft_expand(char **env, char *str, int sta);
 
 /*************************/
+/******* Builtins ********/
+void	echo(char **env, t_list *list);
+void	expaned_arg(char **env, char *arg, int s);
+int	ft_exit(t_list *data);
+/*************************/
 void ft_add_str(char *ln, t_token **token,char *p, int *i);
 void ft_add_opr(char *ln, t_token **token,char *p, int *i);
 int		ignore_sep(char c, char *line, int index);
+/**********PIPE ERRORS**********************/
+
+int pipe_errors(t_token **token);
+
+/************* Globale struct **************/
+t_dependences dep;
 # endif
 // echo 'dhfhygnfhgynf'
