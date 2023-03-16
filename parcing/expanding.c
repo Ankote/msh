@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 15:53:31 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/14 21:13:55 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/15 17:56:57 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,6 @@ char *ft_get_arg(char **env, char *str, int *i, int sta)
     return(free(p), val);
 }
 
-char *ft_join_free(char *s1, char *s2)
-{
-    char *tmp;
-
-    tmp = ft_strjoin(s1, s2);
-    return(free(s1), tmp);
-}
 //leaks visited
 char *ft_expand(char **env, char *str, int sta)
 {
@@ -78,7 +71,6 @@ char *ft_expand(char **env, char *str, int sta)
     p = ft_strdup("");
     while(str[++i])
     {
-        
         if(str[i] == '$' && (quotes(str, i) == 0 || quotes(str, i) == 1))
         {
             value = ft_get_arg(env, str, (&i), sta);

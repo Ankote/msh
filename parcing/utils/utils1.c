@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 19:50:15 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/14 16:42:50 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:01:57 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ int		quotes(char *line, int index)
 		i++;
 	}
 	return (open);
+}
+char *ft_join_free(char *s1, char *s2)
+{
+    char *tmp;
+
+    tmp = ft_strjoin(s1, s2);
+    return(free(s1), tmp);
 }
 
 char **ft_realloc(char **p, char *str)

@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/15 09:34:33 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/16 10:21:20 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ void	tokens(char *line, t_token **token)
 	while (tmp)
 	{
 		type_arg(tmp);
+		// ft(tmp->type);
 		tmp = tmp->next;
 	}
 }
 
 //lesks checked : done
+
 void expand_list(char **env, t_list **list, int sta)
 {
 	t_list *tmp;
@@ -65,6 +67,7 @@ void expand_list(char **env, t_list **list, int sta)
 			while(tmp->args[++i])
 				tmp->args[i] = ft_expand(env, tmp->args[i],sta);
 		}
+		i = -1;
 		tmp = tmp->next;
 	}
 }
@@ -95,27 +98,35 @@ void	ft_next(char *line, t_token *data, char **env, t_list *list)
 	int	i;
 
 	i = 0;
+
 	tokens(line, &data);
+	if(!check_oper(&data))
+	{
+		return;
+	}
 	get_cmd(&list, &data);
 	expand_list(env, &list, 125);
 	while (list)
 	{
 		i = -1;
-		str_tolower(list->cmd);
-		if (!ft_strcmp(list->cmd, "echo"))
-			echo(env, list);
-		else if (!ft_strcmp(list->cmd, "pwd"))
+		if(list->cmd)
 		{
-			expaned_arg(env, "$PWD", dep.exit_status);
-			printf("\n");
+			if(!check_command(list->cmd))
+				return;
+			str_tolower(list->cmd);
+			if (!ft_strcmp(list->cmd, "echo"))
+				echo(env, list);
+			else if (!ft_strcmp(list->cmd, "pwd"))
+			{
+				expaned_arg(env, "$PWD", dep.exit_status);
+				printf("\n");
+			}
+			else if (!ft_strcmp(list->cmd, "exit"))
+			{
+				ft_exit(list);
+			}
+			ft_free_list(list);
 		}
-		else if (!ft_strcmp(list->cmd, "exit"))
-		{
-			ft_exit(list);
-		}
-		ft_free_list(list);
-		if(!(list)->next)
-			free (list);
 		(list) = (list)->next;
 	}
 	free (line);
@@ -135,7 +146,7 @@ int	main(int ac, char **av, char **env)
 	(void)env;
 	while (1)
 	{
-		line = readline("minishell$ ");
+		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
 		if (!check_single_quotes(line))
 		{ 
 			printf("Syntax Error!\n");

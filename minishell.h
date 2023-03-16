@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/15 09:16:04 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/15 17:22:55 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/history.h>
 # include <stdlib.h>
 # include <fcntl.h>
+#include <dirent.h>
 
 # define EMPTY 0
 # define CMD 1
@@ -110,6 +111,9 @@ int		ignore_sep(char c, char *line, int index);
 /**********PIPE ERRORS**********************/
 
 int pipe_errors(t_token **token);
+int check_oper(t_token **token);
+int  ft_error_char(char *str);
+int check_command(char *str);
 
 /************* Globale struct **************/
 t_dependences dep;

@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/13 21:39:37 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/15 14:39:21 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void get_infile(t_list *list, char *val)
 {
-    list->infile = open(val, O_RDONLY);
-    if(list->infile == -1)
-     {
-        perror(val);
-        list->perror = -1;
+    if(list->infile != -1)
+    {
+        list->infile = open(val, O_RDONLY);
+        if(list->infile == -1)
+        {
+            perror(val);
+            list->perror = -1;
+        }
     }
 }
 
@@ -66,7 +69,12 @@ void ft_add_opr(char *ln, t_token **token,char *p, int *i)
     while (ln[*i] && ignore_sep(ln[*i], ln, *i) && ln[*i] != ' ')
     {
         p = ft_charjoin(p, ln[*i]);
-        if((ln[*i + 1] && !ignore_sep(ln[*i + 1], ln, *i)) || !ln[*i + 1] || ln[*i+1] == ' ')
+        if((ft_strcmp(p, "<") && ft_strcmp(p, ">")) || !ln[*i + 1])
+        {
+            ft_lstadd_back(token, ft_lstnew(CMD, p));
+            break;
+        }
+        if ((!ft_strcmp(p, "<") && ln[*i + 1] != '<') || (!ft_strcmp(p, ">") && ln[*i + 1] != '>'))
         {
             ft_lstadd_back(token, ft_lstnew(CMD, p));
             break;

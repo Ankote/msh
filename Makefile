@@ -15,30 +15,41 @@ OBJCS = $(FILES:.c=.o)
 INCLUDES = libft/libft.a -fsanitize=address
 
 all : $(NAME)
-	clear
 
 $(NAME) : $(OBJCS)
+	@echo "\n"
 	@make -C libft
+	@echo "\033[0;32mCompiling minishell..."
 	@$(CC)  $(OBJCS) -lreadline  $(CFLAGS) $(INCLUDES) -o $(NAME)
 
+	@echo "\n\x1b[34mDone !\033[0m"
 %.o:%.c
+	@printf "\033[0;33mGenerating minishell objects... %-33.33s\r" $@
 	@$(CC)  $(CFLAGS)  -c $<  -o $@
 
 clean :
-	@rm -fr libft/*.o && rm -fr libft/*.a
+	@echo "\033[0;31mCleaning libft..."
+	@make clean -C libft/
+	@echo "\nRemoving binaries..."
 	@rm -fr $(OBJCS)
 	@echo "\033[0;31m𝑶𝒃𝒋𝒆𝒄𝒕𝒔' 𝒄𝒍𝒆𝒂𝒏𝒆𝒅\033[0m"
-	clear
+	@echo "\033[0m"
 
 fclean : clean
-	@rm -fr $(NAME)
-	@echo "\033[1;33m𝙀𝙫𝙚𝙧𝙮𝙩𝙝𝙞𝙣𝙜'𝙨 𝙘𝙡𝙚𝙖𝙣𝙚𝙙\033[0m"
-	clear
+	@echo "\033[0;31mCleaning libft..."
+	@make fclean -C libft/
+	@echo "\nDeleting objects..."
+	@echo "\nDeleting executable..."
+	@rm -f $(NAME)
+	@echo "\033[0m"
 
 re :fclean all
 
-run : re clean
+run : re clean 
+	clear
 	@./minishell
+	
+
 push :
 	git add .
 	git commit -m "Updated"

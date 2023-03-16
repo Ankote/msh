@@ -11,16 +11,22 @@ FILES = ft_isdigit.c ft_memset.c ft_strjoin.c ft_strtrim.c ft_isprint.c\
 		str_tolower.c
 
 OBJCS = $(FILES:.c=.o)
+
 all : $(NAME)
 
 $(NAME) : $(OBJCS)
-	$(ARC) $(NAME) $(OBJCS)
-
+	@echo "\n\n\033[0;32mCompiling libft..."
+	@$(ARC) $(NAME) $(OBJCS)
+	@echo "\033[0m"
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@printf "\033[0;33mGenerating libft objects... %-33.33s\r" $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+
 clean :
-	rm -fr $(OBJCS)
+	@rm -fr $(OBJCS)
+
 fclean : clean
-	rm -fr $(NAME)
+	@rm -fr $(NAME)
+
 re :fclean all
