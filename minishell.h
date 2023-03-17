@@ -6,13 +6,14 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/15 17:22:55 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:51:53 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "libft/libft.h"
+# include "get_next_line/get_next_line.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <readline/readline.h>
@@ -52,6 +53,7 @@ typedef struct	s_token
 typedef struct	s_dependences
 {
 	int				exit_status;
+	char 			**env;
 }   t_dependences;
 
 typedef struct s_list
@@ -114,7 +116,9 @@ int pipe_errors(t_token **token);
 int check_oper(t_token **token);
 int  ft_error_char(char *str);
 int check_command(char *str);
-
+/***********HERE-DOC************/
+void here_doc(t_list *list, char *limiter, char **env);
+char *ft_herd_exp(char **env, char *str, int sta);
 /************* Globale struct **************/
 t_dependences dep;
 # endif

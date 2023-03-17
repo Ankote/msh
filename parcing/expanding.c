@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 15:53:31 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/15 17:56:57 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 11:01:26 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char *ft_get_arg(char **env, char *str, int *i, int sta)
     if(str[(*i + 1)] == '?')
     {
         (*i) ++;
+        //free(ft_itoa)
         return(ft_strdup(ft_itoa(sta)));
     }  
     while(str[++(*i)] && ft_isalnum(str[*i]))
@@ -60,7 +61,7 @@ char *ft_get_arg(char **env, char *str, int *i, int sta)
     return(free(p), val);
 }
 
-//leaks visited
+//leaks : visited
 char *ft_expand(char **env, char *str, int sta)
 {
     int i;
@@ -86,6 +87,29 @@ char *ft_expand(char **env, char *str, int sta)
             if(str[i] == '\"' && quotes(str, i) == 2)
                 p = ft_charjoin(p, str[i]);
         }
+    }
+    free(str);
+    return (p);
+}
+
+char *ft_herd_exp(char **env, char *str, int sta)
+{
+    int i;
+    char *p;
+    char *value;
+
+    i = -1;
+    p = ft_strdup("");
+    while(str[++i])
+    {
+        if(str[i] == '$')
+        {
+            value = ft_get_arg(env, str, (&i), sta);
+            p = ft_join_free(p, value);
+            //value free??
+        } 
+        else
+            p = ft_charjoin(p, str[i]);
     }
     free(str);
     return (p);

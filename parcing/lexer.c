@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/15 14:28:28 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:50:53 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	get_cmd(t_list **list, t_token **token)
 			get_infile(tmp_list, tmp->val);
 		else if (tmp->type == OUTFILE)
 			get_outfile(tmp_list, tmp->val, OUTFILE);
+		else if (tmp->type == HERDOC)
+			here_doc(tmp_list, tmp->next->val, dep.env);
 		else if (tmp->type == APPEND)
 			get_outfile(tmp_list, tmp->val, APPEND);
 		if ((tmp->next && tmp->next->type == PIPE) || !tmp->next)

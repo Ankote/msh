@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/16 10:21:20 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 14:47:26 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft(int c)
 		printf("LIMITER ");
 }
 //lesks checked : done
-void	tokens(char *line, t_token **token)
+void	tokens(char *line, t_token **token, char **env)
 {
 	t_token	*tmp;
 
@@ -44,8 +44,9 @@ void	tokens(char *line, t_token **token)
 	tmp = *token;
 	while (tmp)
 	{
-		type_arg(tmp);
-		// ft(tmp->type);
+		type_arg(tmp); 
+		if(tmp->type == INFILE || tmp->type == OUTFILE)
+			tmp->val = ft_expand(env, tmp->val, dep.exit_status);
 		tmp = tmp->next;
 	}
 }
@@ -93,13 +94,13 @@ void ft_free_list(t_list *list)
 	list = NULL;
 }
 
-void	ft_next(char *line, t_token *data, char **env, t_list *list)
+void		ft_next(char *line, t_token *data, char **env, t_list *list)
 {
 	int	i;
 
 	i = 0;
 
-	tokens(line, &data);
+	tokens(line, &data, env);
 	if(!check_oper(&data))
 	{
 		return;
@@ -143,7 +144,7 @@ int	main(int ac, char **av, char **env)
 	list = NULL;
 	(void)ac;
 	(void)av;
-	(void)env;
+	dep.env = env;
 	while (1)
 	{
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
@@ -158,3 +159,10 @@ int	main(int ac, char **av, char **env)
 		dep.exit_status = SUCCESS;
 	}
 }
+
+// int main(int ac, char **av, char **env)
+// {
+//     (void)ac;
+// 	(void)av;
+// 	here_doc("\'l\'", env);
+// }
