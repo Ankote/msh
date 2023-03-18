@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 14:51:39 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/18 11:22:08 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,32 @@ char  *exp_limiter(char *limiter)
 	return (p);
 }
 
+char *check_name()
+{
+	int i;
+	char *name;
+
+	i = 0;
+	name = ft_itoa(i);
+	while(!access(name, F_OK))
+	{
+		free(name);
+		name = ft_itoa(++i);
+	}
+	return(name);
+}
+
 void here_doc(t_list *list, char *limiter, char **env)
 {
     char *buffer;
 	int fd;
-
-	fd = open("tmp", O_TRUNC | O_CREAT |  O_RDWR, 0777);
+	int i;
+	char *name;
+	
+	i = 0;
+	name = check_name();
+	fd = open(name, O_TRUNC | O_CREAT |  O_RDWR, 0777);
+	free(name);
 	while(1)
 	{
 		buffer = get_next_line(0);

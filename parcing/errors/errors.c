@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:09:51 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/16 10:35:12 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 18:38:10 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ int pipe_errors(t_token **token)
     }    
     while(tmp)
     {
-        if(tmp->type == PIPE && !tmp->next)
+        if((tmp->type == PIPE && !tmp->next)
+            || (tmp->type == PIPE && 
+            tmp->next && tmp->next->type == PIPE))
         {
             dep.exit_status = ERROR;
             return (0);
@@ -39,8 +41,6 @@ int is_opr(int type)
     if(type == TRUNC || type == APPEND)
         return (1);
     if(type == INPUT || type == HERDOC)
-        return (1);
-    if(type == PIPE)
         return (1);
     return(0);
 }

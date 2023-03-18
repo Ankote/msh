@@ -6,11 +6,24 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 15:29:43 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 21:32:08 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+int hered_found(t_token **token)
+{
+    t_token *tmp;
+
+    tmp = *token;
+    while(tmp)
+    {
+        if(tmp->type == HERDOC)
+            return(1);
+    }
+    return (0);
+}
 
 void get_infile(t_list *list, char *val)
 {
@@ -24,6 +37,7 @@ void get_infile(t_list *list, char *val)
         }
     }
 }
+
 
 void get_outfile(t_list *list, char *val, int type)
 {

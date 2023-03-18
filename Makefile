@@ -12,7 +12,7 @@ FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
 
 OBJCS = $(FILES:.c=.o)
 
-INCLUDES = libft/libft.a get_next_line/get_next_line.a -fsanitize=address
+INCLUDES = libft/libft.a get_next_line/get_next_line.a #-fsanitize=address
 
 all : $(NAME)
 

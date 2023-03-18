@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 14:47:26 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/17 21:32:17 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,24 @@ void ft_free_list(t_list *list)
 	if(list->args)
 		free_double(list->args);
 	list = NULL;
+}
+
+void ft_ck(t_list **lst)
+{
+	t_list *tmp;
+	 tmp = *lst;
+	while(tmp)
+	{
+		printf("%d", tmp->infile);
+		if(tmp->infile == -1)
+		{
+			printf("error");
+			return;
+		}
+		tmp = tmp->next;
+	}
+	
+	
 }
 
 void		ft_next(char *line, t_token *data, char **env, t_list *list)
