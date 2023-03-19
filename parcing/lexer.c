@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 16:11:20 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:10:36 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,21 @@ void	list_init(t_list *list)
 	list->next = NULL;
 }
 
+int oppen_her(t_token **token, char **env)
+{
+	t_token	*tmp;
+	int fd;
+
+	tmp = *token;
+	while (tmp)
+	{
+		if (tmp->type == HERDOC)
+			fd = here_doc(tmp->next->val, env);
+		tmp = tmp->next;
+	}
+	return(fd);
+}
+
 void	get_cmd(t_list **list, t_token **token)
 {
 	t_token	*tmp;
@@ -31,6 +46,7 @@ void	get_cmd(t_list **list, t_token **token)
 	tmp = *token;
 	tmp_list = (t_list *)malloc(sizeof(t_list));
 	list_init(tmp_list);
+	int fd = oppen_her(token, dep.env);
 	while (tmp)
 	{
 		type_arg(tmp);
@@ -43,7 +59,7 @@ void	get_cmd(t_list **list, t_token **token)
 		else if (tmp->type == OUTFILE)
 			get_outfile(tmp_list, tmp->val, OUTFILE);
 		else if (tmp->type == HERDOC)
-			here_doc(tmp_list, tmp->next->val, dep.env);
+			tmp_list->infile = fd;
 		else if (tmp->type == APPEND)
 			get_outfile(tmp_list, tmp->val, APPEND);
 		if ((tmp->next && tmp->next->type == PIPE) || !tmp->next)

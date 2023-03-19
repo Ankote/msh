@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 21:32:17 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/19 14:10:11 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ void	tokens(char *line, t_token **token, char **env)
 		tmp = tmp->next;
 	}
 }
-
 //lesks checked : done
-
 void expand_list(char **env, t_list **list, int sta)
 {
 	t_list *tmp;
@@ -108,26 +106,17 @@ void ft_ck(t_list **lst)
 		}
 		tmp = tmp->next;
 	}
-	
-	
 }
 
-void		ft_next(char *line, t_token *data, char **env, t_list *list)
+void	ft_next(char *line, t_token *data, char **env, t_list *list)
 {
-	int	i;
-
-	i = 0;
-
 	tokens(line, &data, env);
 	if(!check_oper(&data))
-	{
 		return;
-	}
 	get_cmd(&list, &data);
 	expand_list(env, &list, 125);
 	while (list)
 	{
-		i = -1;
 		if(list->cmd)
 		{
 			if(!check_command(list->cmd))
@@ -141,16 +130,13 @@ void		ft_next(char *line, t_token *data, char **env, t_list *list)
 				printf("\n");
 			}
 			else if (!ft_strcmp(list->cmd, "exit"))
-			{
 				ft_exit(list);
-			}
 			ft_free_list(list);
 		}
-		(list) = (list)->next;
+		list = list->next;
 	}
-	free (line);
+	free(line);
 }
-
 
 int	main(int ac, char **av, char **env)
 {
@@ -170,6 +156,8 @@ int	main(int ac, char **av, char **env)
 		{ 
 			printf("Syntax Error!\n");
 			dep.exit_status = ERROR;
+			free(line);
+			add_history(line);
 			continue ;
 		}
 		add_history(line);
@@ -177,10 +165,3 @@ int	main(int ac, char **av, char **env)
 		dep.exit_status = SUCCESS;
 	}
 }
-
-// int main(int ac, char **av, char **env)
-// {
-//     (void)ac;
-// 	(void)av;
-// 	here_doc("\'l\'", env);
-// }

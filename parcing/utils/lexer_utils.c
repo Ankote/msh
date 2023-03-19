@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 21:32:08 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/18 15:26:26 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void ft_add_str(char *ln, t_token **token,char *p, int *i)
     }
 }
 
-void ft_add_opr(char *ln, t_token **token,char *p, int *i)
+void ft_add_opr(char *ln, t_token **token, char *p, int *i)
 {
     while (ln[*i] && ignore_sep(ln[*i], ln, *i) && ln[*i] != ' ')
     {
