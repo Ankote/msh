@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 14:10:11 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/19 17:48:02 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,9 @@ void	ft_next(char *line, t_token *data, char **env, t_list *list)
 		}
 		list = list->next;
 	}
+	unlink_files(dep.files);
 	free(line);
+	
 }
 
 int	main(int ac, char **av, char **env)

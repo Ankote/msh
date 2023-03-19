@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 15:09:17 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:51:39 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct	s_token
 typedef struct	s_dependences
 {
 	int				exit_status;
+	char **files;
 	char 			**env;
 }   t_dependences;
 
@@ -67,10 +68,7 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-typedef struct s_file
-{
-	char **f_name;
-}t_file;
+
 void		ft_skip_spaces(char *str, int *i);
 void		ft_lstadd_back(t_token **lst, t_token *new);
 t_token		*ft_lstnew(int type, char *val);
@@ -124,6 +122,7 @@ int 		check_command(char *str);
 // int here_doc(char *limiter, char **env, t_file **f);
 int here_doc(char *limiter, char **env);
 // int   		here_doc(char *limiter, char **env, t_file **f);
+void unlink_files(char **files);
 char		*ft_herd_exp(char **env, char *str, int sta);
 /************* Globale struct **************/
 t_dependences dep;

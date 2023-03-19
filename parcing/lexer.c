@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 15:10:36 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/19 18:10:15 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	get_cmd(t_list **list, t_token **token)
 {
 	t_token	*tmp;
 	t_list	*tmp_list;
-
+	
 	tmp = *token;
 	tmp_list = (t_list *)malloc(sizeof(t_list));
 	list_init(tmp_list);

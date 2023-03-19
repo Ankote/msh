@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 15:09:09 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/19 18:47:34 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,18 @@ char *check_name()
 	}
 	return(name);
 }
-void unlink_files(t_file *files)
+
+void unlink_files(char **files)
 {
 	int i;
 
 	i = 0;
-	if(files->f_name)
+	if(files)
 	{
-		while(files->f_name[i])
+		while(files[i])
 		{
-			unlink(files->f_name[i]);
-			free(files->f_name[i]);
+			unlink(files[i]);
+			//free(files[i]);
 			i++;
 		}
 	}
@@ -85,11 +86,13 @@ int  here_doc(char *limiter, char **env)
 	i = 0;
 	name = check_name();
 	fd = open(name, O_TRUNC | O_CREAT |  O_RDWR, 0777);
+	dep.files = ft_realloc(dep.files, name);
 	free(name);
 	while(1 && fd != -1)
 	{
 		buffer = get_next_line(0);
-		if(!ft_strncmp(buffer, exp_limiter(limiter), ft_strlen(buffer) - 1))
+		if(!ft_strncmp(buffer, exp_limiter(limiter), ft_strlen(buffer) - 1) 
+			&& ft_strlen(buffer) > 1)
 		{
 			free(buffer);
 			return (fd);
