@@ -6,24 +6,11 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 18:47:34 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 20:29:44 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int do_exp_inp(char *limiter)
-{
-	int i;
-
-	i = -1;
-	while(limiter[++i])
-	{
-		if(limiter[i] == '\'' || limiter[i] == '\"')
-			return (0);
-	}
-	return (1);
-}
 
 char  *exp_limiter(char *limiter)
 {
@@ -51,55 +38,72 @@ char *check_name()
 	char *name;
 
 	i = 0;
-	name = ft_itoa(i);
+	name = ft_strjoin("/tmp/herdoc_",ft_itoa(i));
 	while(!access(name, F_OK))
 	{
 		free(name);
-		name = ft_itoa(++i);
+		name = ft_strjoin("/tmp/herdoc_",ft_itoa(i++));
 	}
 	return(name);
 }
 
-void unlink_files(char **files)
+void fill_file(int *fd, char *limiter, char **env)
 {
-	int i;
+	char *buffer;
 
-	i = 0;
-	if(files)
+	while(1 && *fd != -1)
 	{
-		while(files[i])
-		{
-			unlink(files[i]);
-			//free(files[i]);
-			i++;
-		}
-	}
-}
-
-int  here_doc(char *limiter, char **env)
-{
-    char *buffer;
-	int fd;
-	int i;
-	char *name;
 	
-	i = 0;
-	name = check_name();
-	fd = open(name, O_TRUNC | O_CREAT |  O_RDWR, 0777);
-	dep.files = ft_realloc(dep.files, name);
-	free(name);
-	while(1 && fd != -1)
-	{
 		buffer = get_next_line(0);
 		if(!ft_strncmp(buffer, exp_limiter(limiter), ft_strlen(buffer) - 1) 
 			&& ft_strlen(buffer) > 1)
 		{
 			free(buffer);
-			return (fd);
+			exit(0) ;
 		}
 		if(do_exp_inp(limiter))
             buffer = ft_herd_exp(env, buffer, dep.exit_status);
-		ft_putstr_fd(buffer, fd);
+		ft_putstr_fd(buffer, *fd);
 	}
-	return(fd);
+	exit(0);
+}
+
+
+char *here_doc(char *limiter, char **env)
+{
+    
+	int fd;
+	char *name;
+	int pid;
+	
+	name = check_name();
+	fd = open(name, O_TRUNC | O_CREAT |  O_RDWR, 0777);
+	dep.files = ft_realloc(dep.files, name);
+	pid = fork();
+	if (!pid)
+	{	
+		signal(SIGINT, handle_signal);
+		fill_file(&fd, limiter,env);
+    	
+	}
+	waitpid(pid, NULL, 0);
+	close (fd);
+	return(name);
+}
+
+void open_her(t_token **token, char **env)
+{
+	t_token	*tmp;
+	char *name;
+
+	tmp = *token;
+	while (tmp)
+	{
+		if (tmp->type == HERDOC)
+		{
+			name = here_doc(tmp->next->val, env);
+			tmp->next->val = name;
+		}
+		tmp = tmp->next;
+	}
 }

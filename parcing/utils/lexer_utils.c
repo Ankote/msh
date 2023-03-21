@@ -6,24 +6,11 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/18 15:26:26 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 21:39:59 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-int hered_found(t_token **token)
-{
-    t_token *tmp;
-
-    tmp = *token;
-    while(tmp)
-    {
-        if(tmp->type == HERDOC)
-            return(1);
-    }
-    return (0);
-}
 
 void get_infile(t_list *list, char *val)
 {
@@ -37,7 +24,6 @@ void get_infile(t_list *list, char *val)
         }
     }
 }
-
 
 void get_outfile(t_list *list, char *val, int type)
 {
@@ -91,7 +77,8 @@ void ft_add_opr(char *ln, t_token **token, char *p, int *i)
             ft_lstadd_back(token, ft_lstnew(CMD, p));
             break;
         }
-        if ((!ft_strcmp(p, "<") && ln[*i + 1] != '<') || (!ft_strcmp(p, ">") && ln[*i + 1] != '>'))
+        if ((!ft_strcmp(p, "<") && ln[*i + 1] != '<') 
+            || (!ft_strcmp(p, ">") && ln[*i + 1] != '>'))
         {
             ft_lstadd_back(token, ft_lstnew(CMD, p));
             break;

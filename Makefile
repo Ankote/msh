@@ -7,8 +7,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
 		$(PRC)/utils/utils1.c $(PRC)/lexer.c $(PRC)/expanding.c\
-		$(PRC)/utils/lexer_utils.c $(DIR)/echo.c $(DIR)/exit.c\
-		$(PRC)/errors/errors.c $(PRC)/here_doc.c
+		$(PRC)/utils/lexer_utils.c  $(DIR)/echo.c $(DIR)/exit.c\
+		$(PRC)/errors/errors.c $(PRC)/here_doc.c $(PRC)/utils/her_doc_utils.c
 
 OBJCS = $(FILES:.c=.o)
 
@@ -53,7 +53,7 @@ run : re clean
 	@./minishell
 	
 
-push :
+push : fclean
 	git add .
 	git commit -m "Updated"
 	git push

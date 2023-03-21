@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 17:48:02 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 22:02:21 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,12 @@ void ft_ck(t_list **lst)
 	}
 }
 
+void exec(t_list *list)
+{
+	dup2(list->outfile , 1);
+	execve("/bin/cat", list->args, NULL);
+}
+
 void	ft_next(char *line, t_token *data, char **env, t_list *list)
 {
 	tokens(line, &data, env);
@@ -117,27 +123,36 @@ void	ft_next(char *line, t_token *data, char **env, t_list *list)
 	expand_list(env, &list, 125);
 	while (list)
 	{
-		if(list->cmd)
+		if(list->args && list->args[0])  
 		{
-			if(!check_command(list->cmd))
+			if(!check_command(list->args[0]))
 				return;
-			str_tolower(list->cmd);
-			if (!ft_strcmp(list->cmd, "echo"))
+			str_tolower(list->args[0]);
+			if (!ft_strcmp(list->args[0], "echo"))
+			{
+				dup2(list->outfile, 1);
 				echo(env, list);
-			else if (!ft_strcmp(list->cmd, "pwd"))
+			}
+			else if (!ft_strcmp(list->args[0], "pwd"))
 			{
 				expaned_arg(env, "$PWD", dep.exit_status);
 				printf("\n");
 			}
-			else if (!ft_strcmp(list->cmd, "exit"))
+			else if (!ft_strcmp(list->args[0], "exit"))
 				ft_exit(list);
-			ft_free_list(list);
+			else
+				exec(list);
 		}
 		list = list->next;
 	}
 	unlink_files(dep.files);
 	free(line);
 	
+}
+
+void handle_signal1(int s)
+{
+	(void) s;
 }
 
 int	main(int ac, char **av, char **env)
@@ -151,6 +166,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	dep.env = env;
+	signal(SIGINT, handle_signal1);
 	while (1)
 	{
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");

@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 15:51:39 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 20:27:02 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,13 @@
 # define INFILE 3
 # define OUTFILE 4
 # define ARG 5
-# define TRUNC 6
-# define APPEND 7
-# define INPUT 8
-# define PIPE 9
-# define HERDOC 10
-# define LIMITER 11
+# define LIMITER 6
+# define TRUNC 7
+# define APPEND 8
+# define INPUT 9
+# define PIPE 10
+# define HERDOC 11
+
 /********exit status*******/
 
 # define ERROR 1
@@ -53,7 +54,7 @@ typedef struct	s_token
 typedef struct	s_dependences
 {
 	int				exit_status;
-	char **files;
+	char 			**files;
 	char 			**env;
 }   t_dependences;
 
@@ -120,10 +121,13 @@ int  		ft_error_char(char *str);
 int 		check_command(char *str);
 /***********HERE-DOC************/
 // int here_doc(char *limiter, char **env, t_file **f);
-int here_doc(char *limiter, char **env);
+char 	*here_doc(char *limiter, char **env);
 // int   		here_doc(char *limiter, char **env, t_file **f);
-void unlink_files(char **files);
+void 		unlink_files(char **files);
 char		*ft_herd_exp(char **env, char *str, int sta);
+void 		handle_signal(int sg);
+int 		do_exp_inp(char *limiter);
+void 		open_her(t_token **token, char **env);
 /************* Globale struct **************/
 t_dependences dep;
 # endif

@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:13:46 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/14 16:52:31 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 20:56:28 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void echo(char **env, t_list *list)
 	int		n;
 	(void)env;
 
-	i = -1;
+	i = 0;
 	n = 0;
 
 	if (!list->args || list->perror == -1)

@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:09:51 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/17 18:38:10 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 13:28:45 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ int check_oper(t_token **token)
         if(is_opr(tmp->type) && !tmp->next)
         {    
              printf("syntax error near unexpected token 'newline'\n");
+             dep.exit_status = ERROR;
+            return (0);
+        }
+         if(is_opr(tmp->type) && tmp->next->type == PIPE)
+        {    
+             printf("syntax error near unexpected token %s\n", tmp->next->val);
              dep.exit_status = ERROR;
             return (0);
         }

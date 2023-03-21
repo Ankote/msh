@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/19 18:10:15 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/21 21:41:53 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,6 @@ void	list_init(t_list *list)
 	list->next = NULL;
 }
 
-int oppen_her(t_token **token, char **env)
-{
-	t_token	*tmp;
-	int fd;
-
-	tmp = *token;
-	while (tmp)
-	{
-		if (tmp->type == HERDOC)
-			fd = here_doc(tmp->next->val, env);
-		tmp = tmp->next;
-	}
-	return(fd);
-}
-
 void	get_cmd(t_list **list, t_token **token)
 {
 	t_token	*tmp;
@@ -46,22 +31,22 @@ void	get_cmd(t_list **list, t_token **token)
 	tmp = *token;
 	tmp_list = (t_list *)malloc(sizeof(t_list));
 	list_init(tmp_list);
-	int fd = oppen_her(token, dep.env);
+	open_her(token, dep.env);
 	while (tmp)
 	{
 		type_arg(tmp);
-		if (tmp->type == CMD)
-			tmp_list->cmd = tmp->val;
-		else if (tmp->type == ARG)
+		// if (tmp->type == CMD)
+		// 	tmp_list->cmd = tmp->val;
+		if (tmp->type == ARG || tmp->type == CMD)
 			tmp_list->args = ft_realloc(tmp_list->args, tmp->val);
 		else if (tmp->type == INFILE)
 			get_infile(tmp_list, tmp->val);
 		else if (tmp->type == OUTFILE)
 			get_outfile(tmp_list, tmp->val, OUTFILE);
-		else if (tmp->type == HERDOC)
-			tmp_list->infile = fd;
 		else if (tmp->type == APPEND)
-			get_outfile(tmp_list, tmp->val, APPEND);
+			get_outfile(tmp_list, tmp->next->val, APPEND);
+		else if (tmp->type == HERDOC)
+			get_infile(tmp_list, tmp->next->val);
 		if ((tmp->next && tmp->next->type == PIPE) || !tmp->next)
 			add_command(list, &tmp_list);
 		tmp = tmp->next;
