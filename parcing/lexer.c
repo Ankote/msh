@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/21 21:41:53 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/22 09:34:17 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	get_cmd(t_list **list, t_token **token)
 		else if (tmp->type == OUTFILE)
 			get_outfile(tmp_list, tmp->val, OUTFILE);
 		else if (tmp->type == APPEND)
-			get_outfile(tmp_list, tmp->next->val, APPEND);
+			get_outfile(tmp_list, tmp->next->val, APPOUT);
 		else if (tmp->type == HERDOC)
 			get_infile(tmp_list, tmp->next->val);
 		if ((tmp->next && tmp->next->type == PIPE) || !tmp->next)
@@ -67,6 +67,8 @@ void	type_arg(t_token *token)
 		token->type = PIPE;
 	else if (token->prev && token->prev->type == INPUT)
 		token->type = INFILE;
+	else if (token->prev && token->prev->type == APPEND)
+		token->type = APPOUT;
 	else if (token->prev && token->prev->type == TRUNC)
 		token->type = OUTFILE;
 	else if (token->prev && token->prev->type == HERDOC)

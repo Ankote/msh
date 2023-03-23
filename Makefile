@@ -53,7 +53,7 @@ run : re clean
 	@./minishell
 	
 
-push : fclean
+push :
 	git add .
 	git commit -m "Updated"
 	git push

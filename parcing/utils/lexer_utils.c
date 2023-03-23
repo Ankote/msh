@@ -6,14 +6,27 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/21 21:39:59 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/23 14:53:59 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+int is_std(char *val)
+{
+    if(ft_strcmp("/dev/stdin", val) || ft_strcmp("/dev/stdin/", val))
+        return (1);
+    if(ft_strcmp("/dev/stdout", val) || ft_strcmp("/dev/stdout/", val))
+        return (1);
+    if(ft_strcmp("/dev/stderr", val) || ft_strcmp("/dev/stderr/", val))
+        return (1);
+    return (0);
+}
+
 void get_infile(t_list *list, char *val)
 {
+    if(is_std(val))
+        return;
     if(list->infile != -1)
     {
         list->infile = open(val, O_RDONLY);
@@ -27,6 +40,8 @@ void get_infile(t_list *list, char *val)
 
 void get_outfile(t_list *list, char *val, int type)
 {
+     if(is_std(val))
+        return;
     if(list->perror != -1)
     {
         if (type == OUTFILE)

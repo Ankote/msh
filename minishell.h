@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/21 20:27:02 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/22 09:32:16 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@
 # define CMD 1
 # define INFILE 3
 # define OUTFILE 4
-# define ARG 5
-# define LIMITER 6
-# define TRUNC 7
-# define APPEND 8
-# define INPUT 9
-# define PIPE 10
-# define HERDOC 11
+# define APPOUT 5
+# define ARG 6
+# define LIMITER 7
+# define TRUNC 8
+# define APPEND 9
+# define INPUT 10
+# define PIPE 11
+# define HERDOC 12
 
 /********exit status*******/
 
