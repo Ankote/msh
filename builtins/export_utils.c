@@ -1,26 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_tolower.c                                      :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/13 00:00:57 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/13 00:01:19 by rakhsas          ###   ########.fr       */
+/*   Created: 2023/03/17 16:58:58 by rakhsas           #+#    #+#             */
+/*   Updated: 2023/03/20 15:28:17 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-
-void str_tolower(char *str)
+char	*ft_next_search(int *i, char *str)
 {
-	int	i;
+	char	*s;
+	int		j;
+
+	j = 0;
+	s = (char *)malloc(sizeof(char) * (*i + 1));
+	if (!s)
+		return (NULL);
+	while (str[j] && j < *i)
+	{
+		s[j] = str[j];
+		j++;
+	}
+	s[j] = '\0';
+	return (s);
+}
+
+char	*ft_search(char *str, char c)
+{
+	int		i;
 
 	i = 0;
-	while (i[str])
+	if (!str)
+		return (NULL);
+	while (str[i])
 	{
-		i[str] = ft_tolower(i[str]);
+		if (str[i] == c)
+		{
+			i++;
+			break ;
+		}
 		i++;
 	}
+	return (ft_next_search(&i, str));
 }

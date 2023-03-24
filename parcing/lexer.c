@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/22 09:34:17 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/23 15:53:09 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	list_init(t_list *list)
 {
 	list->args = NULL;
+	// list->args[0] = NULL;
 	list->cmd = NULL;
 	list->infile = 0;
 	list->outfile = 1;
@@ -35,8 +36,8 @@ void	get_cmd(t_list **list, t_token **token)
 	while (tmp)
 	{
 		type_arg(tmp);
-		// if (tmp->type == CMD)
-		// 	tmp_list->cmd = tmp->val;
+		//  if (tmp->type == CMD)
+		//  	tmp_list->args[0] = tmp->val;
 		if (tmp->type == ARG || tmp->type == CMD)
 			tmp_list->args = ft_realloc(tmp_list->args, tmp->val);
 		else if (tmp->type == INFILE)

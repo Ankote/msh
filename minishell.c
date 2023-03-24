@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/23 14:47:04 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/24 00:16:15 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft(int c)
 		printf("LIMITER ");
 }
 //lesks checked : done
-void	tokens(char *line, t_token **token, char **env)
+void	tokens(char *line, t_token **token)
 {
 	t_token	*tmp;
 
@@ -46,7 +46,7 @@ void	tokens(char *line, t_token **token, char **env)
 	{
 		type_arg(tmp);
 		if(tmp->type == INFILE || tmp->type == OUTFILE)
-			tmp->val = ft_expand(env, tmp->val, dep.exit_status);
+			tmp->val = ft_expand(dep.env, tmp->val, dep.exit_status);
 		tmp = tmp->next;
 	}
 }
@@ -74,7 +74,7 @@ void expand_list(char **env, t_list **list, int sta)
 void ft_free_token(t_token **list)
 {
 	t_token *tmp;
-	
+
 	while(*list)
 	{
 		tmp = *list;
@@ -85,8 +85,8 @@ void ft_free_token(t_token **list)
 
 void ft_free_list(t_list *list)
 {
-	if(list->cmd)
-		free(list->cmd);
+	if(list->args[0])
+		free(list->args[0]);
 	if(list->args)
 		free_double(list->args);
 	list = NULL;
@@ -108,52 +108,26 @@ void ft_ck(t_list **lst)
 	}
 }
 
-void exec(t_list *list)
-{
-	dup2(list->outfile , 1);
-	dup2(list->infile , 0);
-	// int i = 0;
-	// while(list->args[i])
-	// {
-	// 	printf("%s ", list->args[i++]);
-	// }
-	execve("/bin/cat", list->args, NULL);
-}
+// void exec(t_list *list)
+// {
+// 	dup2(list->outfile , 1);
+// 	dup2(list->infile , 0);
+// 	execve("/bin/cat", list->args, NULL);
+// }
 
-void	ft_next(char *line, t_token *data, char **env, t_list *list)
+
+void	ft_next(char *line, t_token *data, t_list *list)
 {
-	tokens(line, &data, env);
+	tokens(line, &data);
 	if(!check_oper(&data))
-		return;
-	get_cmd(&list, &data);
-	expand_list(env, &list, 125);
-	while (list)
 	{
-		if(list->args && list->args[0])  
-		{
-			if(!check_command(list->args[0]))
-				return;
-			str_tolower(list->args[0]);
-			if (!ft_strcmp(list->args[0], "echo"))
-			{
-				// dup2(list->outfile, 1);
-				echo(env, list);
-			}
-			else if (!ft_strcmp(list->args[0], "pwd"))
-			{
-				expaned_arg(env, "$PWD", dep.exit_status);
-				printf("\n");
-			}
-			else if (!ft_strcmp(list->args[0], "exit"))
-				ft_exit(list);
-			else
-				exec(list);
-		}
-		list = list->next;
+		return;
 	}
-	//unlink_files(dep.files);
-	free(line);
-	
+	get_cmd(&list, &data);
+	expand_list(dep.env, &list, 125);
+	ft_exec(list);
+	free (line);
+	// system("leaks minishell");
 }
 
 void handle_signal1(int s)
@@ -166,6 +140,38 @@ void handle_signal2(int s)
 	exit(0);
 }
 
+char **ft_help_env(char **env)
+{
+	char	**new_env;
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (!env)
+		return (NULL);
+	while (env[i])
+		i++;
+	new_env = (char **)malloc(sizeof(char *) * (i + 1));
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	while (env[i])
+	{
+		j = 0;
+		new_env[i] = malloc(sizeof(char) * ft_strlen(env[i]) + 1);
+		while (env[i][j])
+		{
+			new_env[i][j] = env[i][j];
+			j++;
+		}
+		new_env[i][j] = 0;
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_token	*data;
@@ -173,17 +179,19 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 
 	data = malloc(sizeof(data));
+	dep.env = ft_help_env(env);
+	dep.env_copy = ft_help_env(env);
+	dep.pwd = get_pwd("PWD=");
 	list = NULL;
 	(void)ac;
 	(void)av;
-	dep.env = env;
 	signal(SIGINT, handle_signal1);
 	signal(SIGKILL, handle_signal2);
 	while (1)
 	{
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
 		if (!check_single_quotes(line))
-		{ 
+		{
 			printf("Syntax Error!\n");
 			dep.exit_status = ERROR;
 			free(line);
@@ -191,7 +199,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		add_history(line);
-		ft_next(line, data, env, list);
+		ft_next(line, data, list);
 		dep.exit_status = SUCCESS;
 	}
 }

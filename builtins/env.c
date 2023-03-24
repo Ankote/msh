@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_striteri.c                                      :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/20 04:59:40 by aankote           #+#    #+#             */
-/*   Updated: 2022/10/25 01:47:00 by aankote          ###   ########.fr       */
+/*   Created: 2023/03/15 10:03:56 by rakhsas           #+#    #+#             */
+/*   Updated: 2023/03/17 15:07:36 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+#include "../minishell.h"
+
+void	ft_env(void)
 {
 	int	i;
 
 	i = 0;
-	if (s)
+	if (!dep.env)
+		printf("env: No such file or directory\n");
+	while (dep.env[i])
 	{
-		while (s[i])
-		{
-			(*f)(i, s + i);
-			i++;
-		}
+		printf ("%s\n", dep.env[i]);
+		i++;
 	}
 }

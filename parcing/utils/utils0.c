@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 08:51:50 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/14 16:57:08 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/23 15:37:36 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,21 @@ void	ft_lstadd_back(t_token **lst, t_token *new)
 		new->prev = temp;
 		temp->next = new;
 	}
+}
+
+int	ft_listsize(t_list *list)
+{
+	int	i;
+
+	i = 0;
+	if (!list)
+		return (0);
+	while (list)
+	{
+		i++;
+		list = list->next;
+	}
+	return (i);
 }
 
 void ft_free(char **p)

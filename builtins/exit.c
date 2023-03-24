@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:24:00 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/13 15:46:35 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:18:56 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ void	is_numeric(char **args)
 	int	i;
 	int	j;
 
-	i = 1;
+	i = 0;
 	j = 0;
+
 	while (args[i] != NULL)
 	{
 		while (args[0][j])
@@ -43,7 +44,8 @@ void	is_numeric(char **args)
 				write(2, "minishell: exit: ", 17);
 				write(2, args[0], ft_strlen(args[0]));
 				write(2, ": numeric argument required\n", 28);
-				exit(255);
+				dep.exit_status = 255;
+				exit(dep.exit_status);
 			}
 			j++;
 		}
@@ -54,26 +56,30 @@ void	is_numeric(char **args)
 int	ft_exit(t_list *data)
 {
 	long long	len;
-	len = count_args(data->args);
-	// printf("%s", data->args[0]);
-	if (!data->args[0])
-		(printf("exit\n"), exit(0));
-	is_numeric(data->args);
-	// write(2, &len, 4);
-	if (len > 2)
-		write(2, "exit\nminishell: exit: too many arguments\n", 41);
-	else if (len == 2)
+
+	len = count_args(data->args + 1);
+	if (len == 1)
+		(printf("exit\n"), dep.exit_status = 0, exit(dep.exit_status));
+	if (data->args + 1)
 	{
-		len = ft_atoi(data->args[0]);
-		if (data->args[0][0] != '-' && len < 0)
+		is_numeric(data->args + 1);
+		if (len > 2)
+			write(2, "exit\nminishell: exit: too many arguments\n", 41);
+		else if (len == 2)
 		{
-			write(2, "minishell: exit: ", 17);
-			write(2, data->args[0], ft_strlen(data->args[0]));
-			write(2, ": numeric argument required\n", 28);
-			exit(255);
+			len = ft_atoi(data->args[1]);
+			if (data->args[1][0] != '-' && len < 0)
+			{
+				write(2, "minishell: exit: ", 17);
+				write(2, data->args[1], ft_strlen(data->args[1]));
+				write(2, ": numeric argument required\n", 28);
+				dep.exit_status = 255;
+				exit(dep.exit_status);
+			}
+			else
+				(printf("exit\n"), dep.exit_status = ft_atoi(data->args[1]),
+					exit(dep.exit_status));
 		}
-		else
-			(printf("exit\n"), exit(ft_atoi(data->args[0])));
 	}
 	return (1);
 }
