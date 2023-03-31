@@ -3,25 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 10:03:56 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/17 15:07:36 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 00:08:21 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_env(void)
+int	search(char *str, char c)
 {
 	int	i;
 
 	i = 0;
-	if (!dep.env)
-		printf("env: No such file or directory\n");
-	while (dep.env[i])
+	while (str[i])
 	{
-		printf ("%s\n", dep.env[i]);
+		if (str[i] == c)
+		{
+			if (str[i+1])
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+void	ft_env(int out)
+{
+	int	i;
+
+	i = 0;
+	if (!g_dep.env)
+		ft_putstr_fd("env: No such file or directory\n", out);
+	while (g_dep.env[i])
+	{
+		if (search(g_dep.env[i], '=') == 1)
+			ft_putendl_fd(g_dep.env[i], out);
 		i++;
 	}
 }

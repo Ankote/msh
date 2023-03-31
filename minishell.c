@@ -6,145 +6,102 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/24 00:16:15 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 03:25:39 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft(int c)
-{
-	if (c == CMD)
-		printf("CMD ");
-	if (c == ARG)
-		printf("ARG ");
-	if (c == TRUNC)
-		printf("TRUNC ");
-	if (c == APPEND)
-		printf("APPEND ");
-	if (c == INPUT)
-		printf("INPUT ");
-	if (c == PIPE)
-		printf("PIPE ");
-	if (c == INFILE)
-		printf("INFILE ");
-	if (c == OUTFILE)
-		printf("OUTFILE ");
-	if (c == HERDOC)
-		printf("HERDOC ");
-	if (c == LIMITER)
-		printf("LIMITER ");
-}
-//lesks checked : done
-void	tokens(char *line, t_token **token)
-{
-	t_token	*tmp;
+// void	ft(int c)
+// {
+// 	if (c == CMD)
+// 		printf("CMD ");
+// 	if (c == ARG)
+// 		printf("ARG ");
+// 	if (c == TRUNC)
+// 		printf("TRUNC ");
+// 	if (c == APPEND)
+// 		printf("APPEND ");
+// 	if (c == INPUT)
+// 		printf("INPUT ");
+// 	if (c == PIPE)
+// 		printf("PIPE ");
+// 	if (c == INFILE)
+// 		printf("INFILE ");
+// 	if (c == OUTFILE)
+// 		printf("OUTFILE ");
+// 	if (c == HERDOC)
+// 		printf("HERDOC ");
+// 	if (c == LIMITER)
+// 		printf("LIMITER ");
+// }
 
-	get_token(line, token);
-	tmp = *token;
-	while (tmp)
-	{
-		type_arg(tmp);
-		if(tmp->type == INFILE || tmp->type == OUTFILE)
-			tmp->val = ft_expand(dep.env, tmp->val, dep.exit_status);
-		tmp = tmp->next;
-	}
-}
 //lesks checked : done
-void expand_list(char **env, t_list **list, int sta)
+void	expand_list(char **env, t_list **list)
 {
-	t_list *tmp;
-	int i;
+	t_list	*tmp;
+	int		i;
+
 	i = -1;
 	tmp = *list;
-	while(tmp)
+	while (tmp)
 	{
-		if(tmp->cmd)
-			tmp->cmd = ft_expand(env, tmp->cmd,sta);
-		if(tmp->args)
+		if (tmp->cmd)
+			tmp->cmd = ft_expand(env, tmp->cmd);
+		if (tmp->args)
 		{
-			while(tmp->args[++i])
-				tmp->args[i] = ft_expand(env, tmp->args[i],sta);
+			while (tmp->args[++i])
+			{
+				tmp->args[i] = ft_expand(env, tmp->args[i]);
+				if (!check_command(tmp->args[0]))
+					tmp->infile = -1;
+			}
 		}
 		i = -1;
 		tmp = tmp->next;
 	}
 }
 
-void ft_free_token(t_token **list)
+void	ft_lstclear(t_token **token)
 {
-	t_token *tmp;
+	t_token	*current;
+	t_token	*next;
 
-	while(*list)
+	if (!token)
+		return ;
+	current = *token;
+	while (current != NULL)
 	{
-		tmp = *list;
-		*list = (*list)->next;
-		free(tmp);
+		next = current->next;
+		free(current->val);
+		free(current);
+		current = next;
 	}
+	*token = NULL;
 }
-
-void ft_free_list(t_list *list)
-{
-	if(list->args[0])
-		free(list->args[0]);
-	if(list->args)
-		free_double(list->args);
-	list = NULL;
-}
-
-void ft_ck(t_list **lst)
-{
-	t_list *tmp;
-	 tmp = *lst;
-	while(tmp)
-	{
-		printf("%d", tmp->infile);
-		if(tmp->infile == -1)
-		{
-			printf("error");
-			return;
-		}
-		tmp = tmp->next;
-	}
-}
-
-// void exec(t_list *list)
-// {
-// 	dup2(list->outfile , 1);
-// 	dup2(list->infile , 0);
-// 	execve("/bin/cat", list->args, NULL);
-// }
-
 
 void	ft_next(char *line, t_token *data, t_list *list)
 {
-	tokens(line, &data);
-	if(!check_oper(&data))
+	if (tokens(line, &data) == 258)
 	{
-		return;
+		ft_lstclear(&data);
+		free(line);
+		return ;
 	}
 	get_cmd(&list, &data);
-	expand_list(dep.env, &list, 125);
-	ft_exec(list);
-	free (line);
-	// system("leaks minishell");
+	ft_lstclear(&data);
+	expand_list(g_dep.env, &list);
+	if (list)
+		ft_exec(list);
+	free_list(list);
+	free(line);
 }
 
-void handle_signal1(int s)
-{
-	(void) s;
-}
-void handle_signal2(int s)
-{
-	(void) s;
-	exit(0);
-}
-
-char **ft_help_env(char **env)
+char	**ft_help_env(char **env)
 {
 	char	**new_env;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -152,7 +109,7 @@ char **ft_help_env(char **env)
 		return (NULL);
 	while (env[i])
 		i++;
-	new_env = (char **)malloc(sizeof(char *) * (i + 1));
+	new_env = (char **)malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
 		return (NULL);
 	i = 0;
@@ -168,6 +125,7 @@ char **ft_help_env(char **env)
 		new_env[i][j] = 0;
 		i++;
 	}
+	new_env[i++] = ft_strdup("OLDPWD=");
 	new_env[i] = NULL;
 	return (new_env);
 }
@@ -179,9 +137,9 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 
 	data = malloc(sizeof(data));
-	dep.env = ft_help_env(env);
-	dep.env_copy = ft_help_env(env);
-	dep.pwd = get_pwd("PWD=");
+	g_dep.env = ft_help_env(env);
+	g_dep.env_copy = ft_help_env(env);
+	g_dep.pwd = get_pwd("PWD=");
 	list = NULL;
 	(void)ac;
 	(void)av;
@@ -190,16 +148,16 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
-		if (!check_single_quotes(line))
+		if (!line)
+			break ;
+		if (!check_cmd_syntax(line))
 		{
-			printf("Syntax Error!\n");
-			dep.exit_status = ERROR;
-			free(line);
+			g_dep.exit_status = SYNTAX_ERROR;
 			add_history(line);
+			free(line);
 			continue ;
 		}
 		add_history(line);
 		ft_next(line, data, list);
-		dep.exit_status = SUCCESS;
 	}
 }
