@@ -6,13 +6,12 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 20:41:41 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/31 01:32:42 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/09 20:59:06 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
 	int	i;
 
@@ -20,6 +19,8 @@ size_t	ft_strlen(const char *s)
 	if (!s)
 		return (0);
 	while (s[i])
+	{
 		i++;
+	}
 	return (i);
 }
